@@ -1,5 +1,6 @@
 /* eslint-disable no-lone-blocks */
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const containerStyle = {
   display: "flex",
@@ -12,6 +13,15 @@ const starContainerStyle = {
   gap: "4px",
 };
 
+StarRating.propTypes = {
+  maxRating: PropTypes.number,
+  defaultRating: PropTypes.number,
+  color: PropTypes.string,
+  size: PropTypes.number,
+  messages: PropTypes.string,
+  className: PropTypes.string,
+  onSetRating: PropTypes.func,
+};
 // eslint-disable-next-line no-lone-blocks
 {
   /*
@@ -27,22 +37,26 @@ export default function StarRating({
   color = "#fcc419",
   size = 48,
   className = "",
+  messages = [],
+  defaultRating = 0,
+  onSetRating,
 }) {
   {
     /*we are creating a state to help us do stuffs with our star, such as, hover over them, click on them, and the changes that will come with each*/
   }
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
 
   function handleRating(rating) {
     setRating(rating);
+    onSetRating(rating);
   }
 
   const textStyle = {
     lineHeight: "1",
     margin: "0",
     color,
-    fontSize: "${ size / 1.5}px",
+    fontSize: "${size / 1.5}px",
   };
 
   return (
@@ -61,7 +75,11 @@ export default function StarRating({
         ))}
       </div>
 
-      <p style={textStyle}>{tempRating || rating || ""}</p>
+      <p style={textStyle}>
+        {messages.length === maxRating
+          ? messages[tempRating ? tempRating - 1 : rating - 1]
+          : tempRating || rating || ""}
+      </p>
     </div>
   );
 }
