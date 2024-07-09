@@ -317,6 +317,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
       runtime: Number(runtime.split(" ").at(0)),
     };
     onAddWatched(newWatchedMovie);
+    onCloseMovie();
   }
   /** loading  the selected movie in the moviedetails section, we will use useeFFECT*/
 
