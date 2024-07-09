@@ -53,12 +53,21 @@ const average = (arr) =>
 const KEY = "f84fc31d";
 
 export default function App() {
-  const [query, setQuery] = useState("inception ");
+  const [query, setQuery] = useState("interstellar ");
   const [watched, setWatched] = useState([]);
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const tempQuery = "Interstellar";
+  const [selectedId, setSelectedId] = useState(null);
+
+  function handleSelectMovie(id) {
+    setSelectedId((selectedId) => (id === selectedId ? null : id));
+  }
+
+  function handleCloseMovie() {
+    setSelectedId(null);
+  }
 
   useEffect(
     function () {
@@ -66,9 +75,6 @@ export default function App() {
         try {
           setIsLoading(true);
           setError("");
-          const res = await fetch(
-            "http://www.omdbapi.com/?apikey=${KEY}&s=${query}"
-          );
 
           if (!res.ok)
             throw new Error("Something went wrong with fetching movies");
@@ -107,14 +113,25 @@ export default function App() {
         <Box>
           {/*{isLoading ? <Loader /> : <MovieList movies={movies} />}*/}
           {isLoading && <Loader />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
+          )}
           {error && <ErrorMessage message={error} />}
         </Box>
 
         <Box>
           <>
-            <WatchedSummary watched={watched} />
-            <WatchedMovieList watched={watched} />
+            {selectedId ? (
+              <MovieDetails
+                selectedId={selectedId}
+                onCloseMovie={handleCloseMovie}
+              />
+            ) : (
+              <>
+                <WatchedSummary watched={watched} />
+                <WatchedMovieList watched={watched} />
+              </>
+            )}
           </>
         </Box>
 
@@ -141,7 +158,7 @@ function Loader() {
 function ErrorMessage({ message }) {
   return (
     <p>
-      <span> </span>
+      <span> ⛔️ </span>
       {message}
     </p>
   );
@@ -235,23 +252,25 @@ function Box({ children }) {
   );
 }
 **/
-function MovieList() {
-  const [movies, setMovies] = useState(tempMovieData);
-
+function MovieList({ movies, onSelectMovie }) {
   return (
     <div>
-      <ul className="list">
+      <ul className="list list-movies">
         {movies?.map((movie) => (
-          <Movie movie={movie} key={movie.imdbID} />
+          <Movie
+            movie={movie}
+            key={movie.imdbID}
+            onSelectMovie={onSelectMovie}
+          />
         ))}
       </ul>
     </div>
   );
 }
 
-function Movie({ movie }) {
+function Movie({ movie, onSelectMovie }) {
   return (
-    <li>
+    <li onClick={() => onSelectMovie(movie.imdbID)}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
@@ -264,6 +283,42 @@ function Movie({ movie }) {
   );
 }
 
+function MovieDetails({ selectedId, onCloseMovie }) {
+  const [movie, setMovie] = useState({});
+  const {
+    Title: title, 
+    Year: year, 
+    Poster: poster, 
+    Runtime: runtime, 
+    imdbRating, 
+    Plot: plot, 
+    Released: released, 
+    Actors: actors, 
+    Director: director, 
+    Genre: genre
+  } = movie;
+  /** loading  the selected movie in the moviedetails section, we will use useeFFECT*/
+
+  useEffect(function () {
+    async function getMovieDetails() {
+      const res = await fetch(
+        "http://www.omdbapi.com/?apikey=${KEY}&i=${selectedID}"
+      );
+      const data = await res.json();
+      setMovie(data);
+    }
+    getMovieDetails();
+  }, []),
+  
+  return (
+    <div className="details">
+      <button className="btn-back" onClick={onCloseMovie}>
+        &larr;
+      </button>
+      {selectedId}
+    </div>
+  );
+}
 function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
