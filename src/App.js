@@ -315,7 +315,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
       year,
       poster,
       imdbRating: Number(imdbRating),
-      runtime: Number(runtime.split(" ").at(0)),
+      userRating: Number(userRating),
+      runtime: Number(runtime.split(" ").at(0)), //this here is especially useful for extracting numeric values from strings where the number is folowed by some descriptive texts
     };
     onAddWatched(newWatchedMovie);
     onCloseMovie();
