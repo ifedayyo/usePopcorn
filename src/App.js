@@ -345,6 +345,26 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   }
+
+  //here we want to be able to use the escape key to leave
+  //the "WatchedMovie" List instead of clicking on the "back"
+  //arrow
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+      document.addEventListener("keydown", callback);
+
+      //CLEAN-UP Function for cleaning our event listener
+      return function () {
+        document.removeEventListener("keydown");
+      };
+    },
+    [onCloseMovie]
+  );
   /** loading  the selected movie in the moviedetails section, we will use useeFFECT*/
 
   useEffect(
