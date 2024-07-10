@@ -133,6 +133,7 @@ export default function App() {
                 selectedId={selectedId}
                 onCloseMovie={handleCloseMovie}
                 onAddWatched={handleAddWatched}
+                watched={watched}
               />
             ) : (
               <>
@@ -291,10 +292,13 @@ function Movie({ movie, onSelectMovie }) {
   );
 }
 
-function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
+function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState("");
+
+  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
+
   const {
     Title: title,
     Year: year,
@@ -365,16 +369,22 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
 
           <section>
             <div className="rating">
-              <StarRating
-                maxRating={10}
-                size={24}
-                onSetRating={setUserRating}
-              />
+              {!isWatched ? (
+                <>
+                  <StarRating
+                    maxRating={10}
+                    size={24}
+                    onSetRating={setUserRating}
+                  />
 
-              {userRating > 0 && (
-                <button className="btn-add" onClick={handleAdd}>
-                  Add to list
-                </button>
+                  {userRating > 0 && (
+                    <button className="btn-add" onClick={handleAdd}>
+                      Add to list
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p> You rated this movie already</p>
               )}
             </div>
 
@@ -436,6 +446,7 @@ function WatchedMovie({ movie }) {
       <li key={movie.imdbID}>
         <img src={movie.poster} alt={`${movie.title} poster`} />
         <h3>{movie.Title}</h3>
+
         <div>
           <p>
             <span>⭐️</span>
@@ -454,3 +465,5 @@ function WatchedMovie({ movie }) {
     </div>
   );
 }
+//if movie already exists in the WatchedMovie section,
+//i don't want it to get added to the list anymore...
