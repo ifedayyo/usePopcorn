@@ -332,6 +332,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Genre: genre,
   } = movie;
 
+  const [avgRating, setAvgRating] = useState(0);
+
   function handleAdd() {
     const newWatchedMovie = {
       imdbID: selectedId,
@@ -343,7 +345,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       runtime: Number(runtime.split(" ").at(0)), //this here is especially useful for extracting numeric values from strings where the number is folowed by some descriptive texts
     };
     onAddWatched(newWatchedMovie);
-    onCloseMovie();
+    //onCloseMovie();
   }
 
   //here we want to be able to use the escape key to leave
