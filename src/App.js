@@ -241,8 +241,12 @@ function Search({ query, setQuery }) {
   // }, []);
 
   const inputEl = useRef(null);
+
   useEffect(function () {
-    inputEl.current.focus();
+    function callback(e) {
+      inputEl.current.focus(); //this is here so we can cleanup after our event
+    }
+    document.addEventListener("keydown", callback);
   }, []);
 
   return (
@@ -392,7 +396,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
   *you can also use react to initialise state
 
-
+*/
   useEffect(
     function () {
       function callback(e) {
@@ -404,12 +408,12 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
       //CLEAN-UP Function for cleaning our event listener
       return function () {
-        document.removeEventListener("keydown");
+        document.removeEventListener("keydown", callback);
       };
     },
     [onCloseMovie]
   );
-  */
+
   /** loading  the selected movie in the moviedetails section, we will use useeFFECT*/
 
   useEffect(
