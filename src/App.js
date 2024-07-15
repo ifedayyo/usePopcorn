@@ -55,12 +55,23 @@ const KEY = "f84fc31d";
 
 export default function App() {
   const [query, setQuery] = useState(" ");
-  const [watched, setWatched] = useState([]);
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const tempQuery = "Interstellar";
   const [selectedId, setSelectedId] = useState(null);
+  //const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(function () {
+    const storedValue = localStorage.getItem("watched");
+    return JSON.parse(storedValue);
+  });
+  /* 
+  what we want to do is to ensure that our "MoviesWatched"
+  list persists in the local storage even when we reload.
+  
+  we can use an effect hook, or we can do it in the
+  handleAddWatched function
+  */
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -72,11 +83,22 @@ export default function App() {
 
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
+
+    //storing watched movies to local storage
+    //localStorage.setItem("watched", JSON.stringify([...watched, movie]));
   }
 
   function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
+
+  useEffect(
+    function () {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    },
+    [watched]
+    //now we need to render the above
+  );
 
   useEffect(
     function () {
@@ -357,6 +379,9 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   callback function. e.g.
   setAvgRating((avgRating) => (avgRating * userRating) / 2)
 
+  *you can also use react to initialise state
+
+
   useEffect(
     function () {
       function callback(e) {
@@ -544,3 +569,6 @@ function WatchedMovie({ movie, onDeleteWatched }) {
 }
 //if movie already exists in the WatchedMovie section,
 //i don't want it to get added to the list anymore...
+
+//useState Summary: check section 13: custom hooks,
+//refs, and more state
