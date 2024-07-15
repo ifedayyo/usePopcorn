@@ -332,8 +332,6 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Genre: genre,
   } = movie;
 
-  const [avgRating, setAvgRating] = useState(0);
-
   function handleAdd() {
     const newWatchedMovie = {
       imdbID: selectedId,
@@ -351,6 +349,14 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   //here we want to be able to use the escape key to leave
   //the "WatchedMovie" List instead of clicking on the "back"
   //arrow
+
+  //THERE IS SOMETHING WRONG WITH THIS LINE
+  /*
+
+  *so to help* react update async-ally, you can use your
+  callback function. e.g.
+  setAvgRating((avgRating) => (avgRating * userRating) / 2)
+
   useEffect(
     function () {
       function callback(e) {
@@ -367,6 +373,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     },
     [onCloseMovie]
   );
+  */
   /** loading  the selected movie in the moviedetails section, we will use useeFFECT*/
 
   useEffect(
