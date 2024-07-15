@@ -242,18 +242,22 @@ function Search({ query, setQuery }) {
 
   const inputEl = useRef(null);
 
-  useEffect(function () {
-    function callback(e) {
-      if (e.code === "Enter") {
-        inputEl.current.focus(); //this is here so we can cleanup after our event
-        setQuery("");
+  useEffect(
+    function () {
+      function callback(e) {
+        if (document.activeElement === inputEl.current) return;
+        if (e.code === "Enter") {
+          inputEl.current.focus(); //this is here so we can cleanup after our event
+          setQuery("");
+        }
       }
-    }
 
-    document.addEventListener("keydown", callback);
+      document.addEventListener("keydown", callback);
 
-    return () => document.addEventListener("keydown", callback);
-  }, []);
+      return () => document.addEventListener("keydown", callback);
+    },
+    [setQuery]
+  );
 
   return (
     <>
