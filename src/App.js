@@ -244,9 +244,15 @@ function Search({ query, setQuery }) {
 
   useEffect(function () {
     function callback(e) {
-      inputEl.current.focus(); //this is here so we can cleanup after our event
+      if (e.code === "Enter") {
+        inputEl.current.focus(); //this is here so we can cleanup after our event
+        setQuery("");
+      }
     }
+
     document.addEventListener("keydown", callback);
+
+    return () => document.addEventListener("keydown", callback);
   }, []);
 
   return (
