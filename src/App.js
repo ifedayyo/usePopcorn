@@ -368,22 +368,6 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   *you can also use react to initialise state
 
 */
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === "Escape") {
-          onCloseMovie();
-        }
-      }
-      document.addEventListener("keydown", callback);
-
-      //CLEAN-UP Function for cleaning our event listener
-      return function () {
-        document.removeEventListener("keydown", callback);
-      };
-    },
-    [onCloseMovie]
-  );
 
   /** loading  the selected movie in the moviedetails section, we will use useeFFECT*/
 
