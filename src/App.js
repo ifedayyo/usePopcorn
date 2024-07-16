@@ -193,11 +193,16 @@ function Search({ query, setQuery }) {
 
   const inputEl = useRef(null);
 
+  useKey("Enter", function () {
+    inputEl.current.focus(); //this is here so we can cleanup after our event
+    setQuery("");
+  });
+
   useEffect(
     function () {
       function callback(e) {
-        if (document.activeElement === inputEl.current) return;
         if (e.code === "Enter") {
+          if (document.activeElement === inputEl.current) return;
           inputEl.current.focus(); //this is here so we can cleanup after our event
           setQuery("");
         }
