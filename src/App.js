@@ -57,7 +57,7 @@ const KEY = "f84fc31d";
 export default function App() {
   const [query, setQuery] = useState(" ");
 
-  const { movies, isLoading, error } = useMovies(query, handleCloseMovie);
+  const { movies, isLoading, error } = useMovies(query);
 
   const tempQuery = "Interstellar";
   const [selectedId, setSelectedId] = useState(null);
