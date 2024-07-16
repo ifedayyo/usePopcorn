@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
+import { useLocalStorageState } from "./useLocalStorageState";
 
 const tempMovieData = [
   {
@@ -56,16 +57,16 @@ const KEY = "f84fc31d";
 
 export default function App() {
   const [query, setQuery] = useState(" ");
-
   const { movies, isLoading, error } = useMovies(query);
-
-  const tempQuery = "Interstellar";
   const [selectedId, setSelectedId] = useState(null);
-  //const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useLocalStorageState([]);
+
+  /*
   const [watched, setWatched] = useState(function () {
     const storedValue = localStorage.getItem("watched");
     return JSON.parse(storedValue);
   });
+  */
 
   /* 
   what we want to do is to ensure that our "MoviesWatched"
