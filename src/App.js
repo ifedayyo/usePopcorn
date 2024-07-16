@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
 import { useLocalStorageState } from "./useLocalStorageState";
+import { useKey } from "./useKey";
 
 const tempMovieData = [
   {
@@ -370,6 +371,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 */
 
   /** loading  the selected movie in the moviedetails section, we will use useeFFECT*/
+  useKey("Escape", onCloseMovie);
 
   useEffect(
     function () {
