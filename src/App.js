@@ -57,7 +57,7 @@ const KEY = "f84fc31d";
 export default function App() {
   const [query, setQuery] = useState(" ");
 
-  const { movies, isLoading, error } = useMovies(query);
+  const { movies, isLoading, error } = useMovies(query, handleCloseMovie);
 
   const tempQuery = "Interstellar";
   const [selectedId, setSelectedId] = useState(null);
@@ -66,6 +66,7 @@ export default function App() {
     const storedValue = localStorage.getItem("watched");
     return JSON.parse(storedValue);
   });
+
   /* 
   what we want to do is to ensure that our "MoviesWatched"
   list persists in the local storage even when we reload.
